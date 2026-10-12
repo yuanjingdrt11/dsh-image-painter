@@ -1,0 +1,45 @@
+# dsh-image-painter —— 用专用图片端点出图，用户原话直通画手。
+#
+# 这里只放**通用默认值**：任何 OpenAI 兼容网关都能用，不含任何个人网关、模型或密钥。
+# 自己的网关/密钥请在 profile 的 cordis.patch.yml 里用同 id 覆盖（config 是整体替换，
+# 覆盖时要把需要改的字段一并写全）—— 或者直接在 **设置 → 模型 → 画手模型** 表单里填，
+# 那张表写的就是 profile 的 cordis.patch.yml 里同 id 的这一行，保存即生效。
+#
+# 每个字段都是 volatile 配置：改完不需要重启，下一次出图就用新值。
+#
+# config：
+#   baseURL          图片端点所在网关（/v1 结尾），默认 https://api.openai.com/v1
+#   apiKeyEnv        凭据名，经 ctx.credentials 解析；密钥不写进配置
+#   model            默认画手模型
+#   models           允许模型按需选择的画手 id 列表
+#   size             默认尺寸，形如 1024x1024
+#   outputDir        产物写入会话工作区的哪个目录（"." 即工作区根）
+#   promptMode       未进入绘画模式时谁写提示词：
+#                      user-message（默认）：把用户原话原样交给画手，模型自拟的提示词被忽略
+#                      model：允许会话模型自己写提示词
+#   useSessionImages true（默认）：用户贴在图里的附件自动作为改图参考
+#   inline           true（默认）：另存一份到 DSH 附件库以便对话内联显示
+#   timeoutMs        单次出图超时
+#
+# 绘画模式（每个会话独立，写进会话日志，可随会话恢复）：
+#   /原文      完整原文直接作为画手提示词
+#   /优化      先用当前会话的对话模型润色提示词，再交给画手
+#   /退出绘画  关闭绘画模式
+#   绘画模式开启时输入框工具行会显示一枚状态 chip，点击可在 原文/优化 之间切换。
+#   宿主命令名只能是 ASCII，所以宿主侧是 /painter [原文|优化|off]，中文斜杠命令由浏览器端提供。
+
+- insert:
+    - id: image-painter
+      name: dsh-image-painter
+      config:
+        baseURL: https://api.openai.com/v1
+        apiKeyEnv: IMAGE_API_KEY
+        model: gpt-image-1
+        models:
+          - gpt-image-1
+        size: 1024x1024
+        outputDir: image-gen
+        promptMode: user-message
+        useSessionImages: true
+        inline: true
+        timeoutMs: 300000

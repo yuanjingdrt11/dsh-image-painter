@@ -1,0 +1,58 @@
+{
+  "name": "dsh-image-painter",
+  "version": "1.1.0",
+  "description": "DSH plugin: paint and edit images through a dedicated images endpoint (GPT Image and compatible models), with a painter-gateway form on the Models settings page and a per-session 绘画模式 (/原文 · /优化).",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "image-generation",
+    "image-editing",
+    "gpt-image",
+    "images-api"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node tests/host.test.mjs && node tests/client.test.mjs",
+    "privacy": "node scripts/privacy-check.mjs",
+    "prepublishOnly": "node scripts/privacy-check.mjs && node tests/host.test.mjs && node tests/client.test.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings-models",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-commands"
+      ]
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.4"
+  }
+}

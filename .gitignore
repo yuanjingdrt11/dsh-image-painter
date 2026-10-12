@@ -1,0 +1,103 @@
+# dsh-image-painter —— 严格的隐私与垃圾文件排除规则
+#
+# 发布/入库的红线：**这个包里不允许出现任何密钥、本机路径、个人网关或账号**。
+# 网关与凭据名只应该写在 profile 的 cordis.patch.yml（~/.dsh/profiles/<name>/），
+# 密钥只应该写在 DSH 凭据库（~/.dsh/.credentials.yaml）或同名环境变量里。
+#
+# 注意：npm 在没有 .npmignore 时会把本文件当忽略清单使用，所以这里**只排除垃圾与隐私文件**，
+# 绝不使用 *.json / *.md / *.yml 这类会误伤 package.json、locale/*.json、README 的通配。
+# 发布内容由 package.json 的 files 白名单决定，本文件是第二道防线。
+
+# ---- 依赖与包管理产物（可由 pnpm/npm 重建，不入库、不发布）----
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# ---- 凭据 / 环境变量 / 私钥：任何形式的机密都不入库 ----
+.env
+.env.*
+!.env.example
+.npmrc
+.pnpmrc
+.yarnrc
+.yarnrc.yml
+auth.json
+credentials
+credentials.*
+*credentials*
+*.secret
+*.secrets
+secrets.yml
+secrets.yaml
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+.token
+.tokens
+*token*.json
+*apikey*
+*api-key*
+
+# ---- 本机/个人覆盖层：个人网关、模型、路径只写在 profile 里 ----
+cordis.patch.local.yml
+cordis.local.yml
+*.local.yml
+*.local.yaml
+*.local.json
+*.local.js
+*.local.mjs
+local.*.yml
+
+# ---- 插件运行产物：出图默认写到会话工作区的 image-gen/ ----
+# 若某个会话的工作区恰好是本目录，这些图也绝不能入库。
+image-gen/
+output/
+*.gen.png
+*.gen.jpg
+*.gen.jpeg
+*.gen.webp
+*.gen.gif
+
+# ---- 编辑器 / 操作系统 / 临时文件 ----
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*.swn
+*~
+*.orig
+*.rej
+*.bak
+*.backup
+.idea/
+.vscode/
+*.code-workspace
+.history/
+.direnv/
+.nvim.lua
+
+# ---- 日志 / 缓存 / 构建与打包产物 ----
+*.log
+logs/
+.cache/
+.tmp/
+tmp/
+dist/
+build/
+coverage/
+.nyc_output/
+*.tgz
+*.tar
+*.tar.gz
+*.zip

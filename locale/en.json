@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "AI image painter",
+    "description": "Paint and edit images through a dedicated images endpoint: fill in the painter gateway under Settings → Models (written to the profile's cordis.patch.yml, applied at once), and switch prompt policy per session with /原文 (verbatim) or /优化 (chat-model optimized)."
+  }
+}
